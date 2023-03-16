@@ -14,7 +14,6 @@ def test_vertex_loss():
     loss = vertex_loss(estimated_vertices, target_vertices, reduction="sum")
     assert loss.ndim == 0
 
-    weights = torch.rand(100, 3)
     loss = vertex_loss(estimated_vertices, target_vertices)
     assert loss.ndim == 0
 

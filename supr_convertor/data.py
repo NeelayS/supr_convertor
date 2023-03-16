@@ -7,9 +7,7 @@ from torch.utils.data import Dataset
 
 
 class MeshFolder(Dataset):
-    def __init__(
-        self, data_folder: str, transforms=None, exts: Optional[Tuple] = None
-    ):
+    def __init__(self, data_folder: str, transforms=None, exts: Optional[Tuple] = None):
 
         if exts is None:
             exts = [".obj", ".ply"]

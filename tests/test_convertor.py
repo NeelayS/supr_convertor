@@ -5,8 +5,8 @@ from supr_convertor.convertor import Convertor
 
 from .utils import get_mock_body_model, get_mock_dataloader
 
+DEVICE = torch.device("cpu")  # torch.device("cuda")
 
-DEVICE = torch.device("cpu") # torch.device("cuda")
 
 def test_Convertor():
 

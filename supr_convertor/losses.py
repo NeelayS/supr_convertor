@@ -8,7 +8,9 @@ def vertex_loss(estimated_vertices, target_vertices, reduction="mean"):
     reduction = reduction.lower()
     assert reduction in ("mean", "sum"), "Reduction must be either 'mean' or 'sum'"
 
-    return torch.nn.functional.mse_loss(estimated_vertices, target_vertices, reduction=reduction)
+    return torch.nn.functional.mse_loss(
+        estimated_vertices, target_vertices, reduction=reduction
+    )
 
 
 def _compute_edges(vertices, connections):

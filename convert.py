@@ -1,5 +1,4 @@
 import argparse
-import os
 
 import torch
 
@@ -41,23 +40,6 @@ if __name__ == "__main__":
         dataloader,
     )
     convertor.convert()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # with different batch sizes
