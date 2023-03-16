@@ -1,0 +1,40 @@
+data:
+  mesh_dir: /path/to/meshes
+  batch_size: 16
+
+model:
+  n_betas: 300
+  gender: female
+  dir: /path/to/model
+
+experiment:
+  device: cuda
+  optimizer_params:
+    lr: 1.0
+    max_iter: 50
+    line_search_fn: strong_wolfe
+  optimization:
+    n_iters: 5
+    low_loss_threshold: 0.01
+    low_loss_delta_threshold: 0.0001
+    regularization_weights: {"pose": 0.01, "betas": 0.01, "trans": 0} # null
+    regularization_iters: {"pose": 2, "betas": 2, "trans": 0} # null
+  edge_loss_optimization: 
+    use: True
+    n_iters: 5
+    low_loss_threshold: 0.01
+    low_loss_delta_threshold: 0.0001
+    regularization_weights: {"pose": 0.1} # null # Only pose params should be regularized (if needed) in this stage
+    regularization_iters: {"pose": 2} # null # Only pose params should be regularized (if needed) in this stage
+  separate_global_translation_optimization: 
+    use: True
+    n_iters: 5
+    low_loss_threshold: 0.01
+    low_loss_delta_threshold: 0.0001
+    regularization_weights: null
+    regularization_iters: null
+  grad_clip: 1.0 # null
+  inherit_prev_batch_params_during_optimization: False
+
+out_dir: ./tmp
+save_output_meshes: True

@@ -1,0 +1,3 @@
+[submodule "SUPR"]
+	path = SUPR
+	url = https://github.com/NeelayS/SUPR.git
