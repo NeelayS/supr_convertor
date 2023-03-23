@@ -1,28 +1,35 @@
 import os
 from typing import Optional, Tuple
 
-import numpy as np
+import torch
 import trimesh
-from torch.utils.data import Dataset
 
 
-class MeshFolder(Dataset):
-    def __init__(self, data_folder: str, transforms=None, exts: Optional[Tuple] = None):
+class MeshFolderDataset(torch.utils.data.Dataset):
+    """
+    Dataloader to load meshes from a folder
+
+    Parameters
+    ----------
+    data_folder: str
+        Path to the folder containing the meshes to load
+    exts: Optional[Tuple]
+        List of extensions to load. Default: [".obj", ".ply"]
+    """
+
+    def __init__(self, data_folder: str, exts: Optional[Tuple] = None):
 
         if exts is None:
             exts = [".obj", ".ply"]
 
         self.data_folder = os.path.expandvars(data_folder)
 
-        self.data_paths = np.array(
-            sorted(
-                [
-                    os.path.join(self.data_folder, fname)
-                    for fname in os.listdir(self.data_folder)
-                    if any(fname.endswith(ext) for ext in exts)
-                ],
-                reverse=False,
-            )
+        self.data_paths = sorted(
+            [
+                os.path.join(self.data_folder, fname)
+                for fname in os.listdir(self.data_folder)
+                if any(fname.endswith(ext) for ext in exts)
+            ],
         )
         self.num_items = len(self.data_paths)
 
@@ -35,6 +42,6 @@ class MeshFolder(Dataset):
         mesh = trimesh.load(mesh_path, process=False)
 
         return {
-            "vertices": np.asarray(mesh.vertices, dtype=np.float32),
-            "faces": np.asarray(mesh.faces, dtype=np.int32),
+            "vertices": torch.tensor(mesh.vertices, dtype=torch.float32),
+            "faces": torch.tensor(mesh.faces),
         }

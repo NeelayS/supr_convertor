@@ -4,6 +4,15 @@ import torch
 import torch.backends.cudnn as cudnn
 
 
+def seed_everything(seed):
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    cudnn.benchmark = False
+    cudnn.deterministic = True
+
+
 def _row(A):
     return A.reshape((1, -1))
 
@@ -41,21 +50,3 @@ def get_vertices_per_edge(n_vertices, faces):
     vpe = vpe[vpe[:, 0] < vpe[:, 1]]
 
     return vpe
-
-
-def v2v_error(estimated_vertices, target_vertices):
-    """
-    Vertex to vertex error (in m)
-    """
-    return torch.mean(
-        torch.sqrt(torch.sum((estimated_vertices - target_vertices) ** 2.0, axis=-1))
-    ).item()
-
-
-def seed_everything(seed):
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
-    cudnn.benchmark = False
-    cudnn.deterministic = True

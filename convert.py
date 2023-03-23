@@ -1,3 +1,12 @@
+# Base config file compatible with trainer
+# Trainer tests
+# Convert.py script
+# README instructions (documentation + example)
+# Setup.py
+# PyPI
+# Web app
+
+
 import argparse
 
 import torch
