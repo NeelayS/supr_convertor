@@ -61,7 +61,7 @@ The number of iterations of the optimization process for the conversion and the 
 4. Run the `convert.py` script to convert the parameters.
 
 ```bash
-python convert.py --config_path <path_to_your_config_file>
+python convert.py --cfg <path_to_your_config_file>
 ```
 
 The converted SUPR parameters will be saved in the `out_dir` specified in the config file. Optionally, SUPR meshes obtained from the converted parameters can be saved as well.
