@@ -9,7 +9,10 @@ A simple tool to convert [SMPL-X](https://smpl-x.is.tue.mpg.de/) model parameter
 ```bash
 git clone --recurse-submodules https://github.com/NeelayS/supr_convertor.git
 ```
-2. Install the dependencies:
+
+2. Install the PyTorch version of your choice, which is compatible with your GPU, from the [official website](https://pytorch.org/).
+
+3. Install the dependencies for this repository:
 
 ```bash
 python setup.py install
