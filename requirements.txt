@@ -1,19 +1,8 @@
-certifi==2022.12.7
-cfgv==3.3.1
-charset-normalizer==3.1.0
-distlib==0.3.6
-filelock==3.9.1
-identify==2.5.20
-idna==3.4
-nodeenv==1.7.0
+fvcore==0.1.5.post20221221
 numpy==1.24.2
-Pillow==9.4.0
-platformdirs==3.1.1
-pre-commit==3.1.1
-PyYAML==6.0
-requests==2.28.2
-torch==1.13.1+cu116
-torchvision==0.14.1+cu116
-typing_extensions==4.5.0
-urllib3==1.26.15
-virtualenv==20.21.0
+omegaconf==2.3.0
+scipy==1.10.1
+setuptools==44.0.0
+# torch==2.0.0
+tqdm==4.65.0
+trimesh==3.21.2

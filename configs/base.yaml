@@ -1,40 +1,55 @@
 data:
-  mesh_dir: /home/nshah/work/projects/transfer/scratch/data/input/meshes/rp_beatrice_posed_019/1000
-  batch_size: 1
+  mesh_dir: /path/to/meshes
+  batch_size: 256
 
 model:
   n_betas: 300
-  gender: female
-  dir: /path/to/model
+  gender: male
+  path: /path/to/model
 
 experiment:
-  device: cuda
+
   optimizer_params:
-    lr: 1.0
+    lr: 0.1
     max_iter: 50
     line_search_fn: strong_wolfe
+
   optimization:
     n_iters: 1000
-    low_loss_threshold: 0.000001
-    low_loss_delta_threshold: 0.00000001
-    regularization_weights: {"pose": 0.01, "betas": 0.01, "trans": 0} # null
-    regularization_iters: {"pose": 2, "betas": 2, "trans": 0} # null
-  edge_loss_optimization: 
-    use: False
-    n_iters: 100
-    low_loss_threshold: 0.001
-    low_loss_delta_threshold: 0.00001
-    regularization_weights: {"pose": 0.1} # null # Only pose params should be regularized (if needed) in this stage
-    regularization_iters: {"pose": 25} # null # Only pose params should be regularized (if needed) in this stage
-  separate_global_translation_optimization: 
-    use: False
-    n_iters: 100
-    low_loss_threshold: 0.001
-    low_loss_delta_threshold: 0.00001
-    regularization_weights: null
-    regularization_iters: null
-  grad_clip: 1.0 # null
-  inherit_prev_batch_params_during_optimization: False
+    low_loss_threshold: 2.0e-5
+    low_loss_delta_threshold: 1.0e-9
+    n_consecutive_low_loss_delta_iters_threshold: 5
+    vertex_loss_reduction: mean
+    apply_rotation_angles_correction: True
+    gradient_clip: null # 1.0
+    params_regularization_weights: null # [0.01, 0.01] # 2 values for 2 sets of params: (betas, pose)
+    params_regularization_iters: null # [50, 100] # 2 values for 2 sets of params: (betas, pose)
 
-out_dir: /home/nshah/work/projects/transfer/scratch/data/output/tmp
+  edge_loss_optimization: 
+    use: True
+    n_iters: 25
+    low_loss_threshold: 5.0e-4
+    low_loss_delta_threshold: 1.0e-7
+    n_consecutive_low_loss_delta_iters_threshold: 5
+    apply_rotation_angles_correction: True
+    gradient_clip: null # 1.0
+    params_regularization_weights: null # [0.01] # 1 value for 1 set of params: (pose)
+    params_regularization_iters: null # [25] # 1 value for 1 set of params: (pose)
+
+  separate_global_translation_optimization: 
+    use: True
+    n_iters: 25
+    low_loss_threshold: 1.0e-3
+    low_loss_delta_threshold: 1.0e-5
+    n_consecutive_low_loss_delta_iters_threshold: 5
+    vertex_loss_reduction: mean
+    gradient_clip: null # 1.0
+
+  optimize_betas_only_for_first_batch: False
+  inherit_prev_batch_params_during_optimization: False
+  vertex_to_vertex_loss_type: vertex_loss # v2v_error
+
+device: cuda:0
+out_dir: /path/to/output/dir
 save_output_meshes: True
+log_iterations_interval: 10

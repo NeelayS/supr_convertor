@@ -1,12 +1,60 @@
 import torch
 
-from supr_convertor.losses import edge_loss, vertex_loss
+from supr_convertor.losses import edge_loss, v2v_error, vertex_loss
+
+
+def test_v2v_error():
+
+    estimated_vertices = torch.rand(2, 100, 3)
+    target_vertices = torch.rand(2, 100, 3)
+
+    loss = v2v_error(estimated_vertices, target_vertices, reduction="mean")
+    assert loss.ndim == 0
+
+    loss = v2v_error(estimated_vertices, target_vertices, reduction="sum")
+    assert loss.ndim == 0
+
+    loss = v2v_error(estimated_vertices, target_vertices)
+    assert loss.ndim == 0
+
+    loss = v2v_error(target_vertices, target_vertices)
+    assert loss == 0
+
+    estimated_vertices = torch.rand(100, 3)
+    target_vertices = torch.rand(100, 3)
+
+    loss = v2v_error(estimated_vertices, target_vertices, reduction="mean")
+    assert loss.ndim == 0
+
+    loss = v2v_error(estimated_vertices, target_vertices, reduction="sum")
+    assert loss.ndim == 0
+
+    loss = v2v_error(estimated_vertices, target_vertices)
+    assert loss.ndim == 0
+
+    loss = v2v_error(target_vertices, target_vertices)
+    assert loss == 0
 
 
 def test_vertex_loss():
 
-    estimated_vertices = torch.rand(1, 100, 3)
-    target_vertices = torch.rand(1, 100, 3)
+    estimated_vertices = torch.rand(2, 100, 3)
+    target_vertices = torch.rand(2, 100, 3)
+
+    loss = vertex_loss(estimated_vertices, target_vertices, reduction="mean")
+    assert loss.ndim == 0
+
+    loss = vertex_loss(estimated_vertices, target_vertices, reduction="sum")
+    assert loss.ndim == 0
+
+    loss = vertex_loss(estimated_vertices, target_vertices)
+    assert loss.ndim == 0
+
+    loss = vertex_loss(target_vertices, target_vertices)
+    assert loss == 0
+
+    estimated_vertices = torch.rand(100, 3)
+    target_vertices = torch.rand(100, 3)
 
     loss = vertex_loss(estimated_vertices, target_vertices, reduction="mean")
     assert loss.ndim == 0
