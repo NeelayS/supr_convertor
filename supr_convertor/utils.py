@@ -13,6 +13,19 @@ def seed_everything(seed):
     cudnn.deterministic = True
 
 
+def validate_device(device: str):
+
+    try:
+        device = torch.device(device)
+        _ = torch.tensor([1.0]).to(device)
+        print(f"Using device: {device}")
+    except:
+        device = torch.device("cpu")
+        print("Device is either invalid or not available. Using CPU.")
+
+    return device
+
+
 def _row(A):
     return A.reshape((1, -1))
 

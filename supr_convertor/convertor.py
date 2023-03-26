@@ -41,7 +41,7 @@ class Convertor:
                 num_workers=1,
             )
         else:
-            self.dataloader
+            self.dataloader = dataloader
 
         self.out_dir = out_dir if out_dir is not None else self.cfg.out_dir
         os.makedirs(self.out_dir, exist_ok=True)
@@ -61,7 +61,7 @@ class Convertor:
 
         if self.device is None:
             try:
-                self.device = torch.device(self.cfg.experiment.device)
+                self.device = torch.device(self.cfg.device)
                 _ = torch.tensor([1.0]).to(self.device)
                 print(f"Using device: {self.device}")
             except:
@@ -248,12 +248,12 @@ class Convertor:
             else:
                 batch_size = self.cfg.data.batch_size
 
-            if n_batch > 0 and self.cfg.single_beta_optimization:
+            if n_batch > 0 and self.cfg.experiment.single_betas_optimization:
                 self._init_params(batch_size=batch_size, betas_without_grad=True)
             else:
                 self._init_params(
                     batch_size=batch_size,
-                    copy_from_prev=self.cfg.experiment.inherit_params_from_prev_batch_during_optimization,
+                    copy_from_prev=self.cfg.experiment.inherit_prev_batch_params_during_optimization,
                 )
 
             print(f"Processing batch {n_batch + 1}/{len(self.dataloader)}")
@@ -271,7 +271,7 @@ class Convertor:
                     params_to_optimize=[self.pose],
                     n_iters=self.cfg.experiment.edge_loss_optimization.n_iters,
                     loss_fn_kwargs={"faces", faces},
-                    apply_rotation_angles_correction=self.cfg.experiment.apply_rotation_angles_correction,
+                    apply_rotation_angles_correction=self.cfg.experiment.edge_loss_optimization.apply_rotation_angles_correction,
                     low_loss_threshold=self.cfg.experiment.edge_loss_optimization.low_loss_threshold,
                     low_loss_delta_threshold=self.cfg.experiment.edge_loss_optimization.low_loss_delta_threshold,
                     n_consecutive_low_loss_delta_iters_threshold=self.cfg.experiment.edge_loss_optimization.n_consecutive_low_loss_delta_iters_threshold,
@@ -342,7 +342,7 @@ class Convertor:
                     f,
                 )
 
-            if self.cfg.save_meshes is True:
+            if self.cfg.save_output_meshes is True:
                 for sample in range(batch_size):
                     idx = n_batch * self.cfg.data.batch_size + sample
 

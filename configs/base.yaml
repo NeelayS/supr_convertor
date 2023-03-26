@@ -1,40 +1,48 @@
 data:
-  mesh_dir: /home/nshah/work/projects/transfer/scratch/data/input/meshes/rp_beatrice_posed_019/1000
-  batch_size: 1
+  mesh_dir: /home/nshah/work/projects/transfer/scratch/data/input/meshes/emotional_body/fancy_dance
+  batch_size: 128
 
 model:
   n_betas: 300
-  gender: female
-  dir: /path/to/model
+  gender: male
+  path: /home/nshah/work/models/supr/supr_male.npy
 
 experiment:
-  device: cuda
+
   optimizer_params:
-    lr: 1.0
+    lr: 0.1
     max_iter: 50
     line_search_fn: strong_wolfe
+
   optimization:
-    n_iters: 1000
-    low_loss_threshold: 0.000001
-    low_loss_delta_threshold: 0.00000001
-    regularization_weights: {"pose": 0.01, "betas": 0.01, "trans": 0} # null
-    regularization_iters: {"pose": 2, "betas": 2, "trans": 0} # null
+    n_iters: 500
+    low_loss_threshold: 2.0e-3
+    low_loss_delta_threshold: 1.0e-6
+    n_consecutive_low_loss_delta_iters_threshold: 5
+    vertex_loss_reduction: mean
+    apply_rotation_angles_correction: True
+
   edge_loss_optimization: 
     use: False
     n_iters: 100
     low_loss_threshold: 0.001
     low_loss_delta_threshold: 0.00001
-    regularization_weights: {"pose": 0.1} # null # Only pose params should be regularized (if needed) in this stage
-    regularization_iters: {"pose": 25} # null # Only pose params should be regularized (if needed) in this stage
-  separate_global_translation_optimization: 
-    use: False
-    n_iters: 100
-    low_loss_threshold: 0.001
-    low_loss_delta_threshold: 0.00001
-    regularization_weights: null
-    regularization_iters: null
-  grad_clip: 1.0 # null
-  inherit_prev_batch_params_during_optimization: False
+    n_consecutive_low_loss_delta_iters_threshold: 5
+    apply_rotation_angles_correction: True
 
-out_dir: /home/nshah/work/projects/transfer/scratch/data/output/tmp
+  separate_global_translation_optimization: 
+    use: True
+    n_iters: 50
+    low_loss_threshold: 2.0e-2
+    low_loss_delta_threshold: 1.0e-4
+    n_consecutive_low_loss_delta_iters_threshold: 5
+    vertex_loss_reduction: mean
+
+  single_betas_optimization: False
+  inherit_prev_batch_params_during_optimization: False
+  vertex_to_vertex_loss_type: v2v_error
+
+device: cuda:0
+out_dir: /home/nshah/work/projects/transfer/scratch/data/output/emotional_body/fancy_dance/run5
 save_output_meshes: True
+log_iterations_interval: 10

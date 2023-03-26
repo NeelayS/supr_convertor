@@ -5,6 +5,14 @@
 # Setup.py
 # PyPI
 # Web app
+# Gradient clipping
+# Regularization
+
+# with different batch sizes
+# with and without edge loss
+# with different learning rates
+# with different regularization weights
+# init params with prev param values
 
 
 import argparse
@@ -14,7 +22,8 @@ import torch
 from SUPR.supr.pytorch.supr import SUPR
 from supr_convertor.config import get_cfg
 from supr_convertor.convertor import Convertor
-from supr_convertor.data import MeshFolder
+from supr_convertor.data import MeshFolderDataset
+from supr_convertor.utils import validate_device
 
 if __name__ == "__main__":
 
@@ -26,11 +35,9 @@ if __name__ == "__main__":
 
     print(f"\nUsing {cfg.model.gender} body model")
 
-    DEVICE = "cuda:0"
-    device = torch.device(DEVICE)
-    print(f"Using device: {DEVICE}")
+    device = validate_device(cfg.device)
 
-    dataset = MeshFolder(cfg.data.mesh_dir)
+    dataset = MeshFolderDataset(cfg.data.mesh_dir)
     dataloader = torch.utils.data.DataLoader(
         dataset,
         batch_size=cfg.data.batch_size,
@@ -38,7 +45,7 @@ if __name__ == "__main__":
     )
 
     target_body_model = SUPR(
-        "/home/nshah/work/models/supr/supr_female.npy",
+        cfg.model.path,
         num_betas=cfg.model.n_betas,
         device=device,
     )
@@ -47,12 +54,6 @@ if __name__ == "__main__":
         cfg,
         target_body_model,
         dataloader,
+        device,
     )
     convertor.convert()
-
-
-# with different batch sizes
-# with and without edge loss
-# with different learning rates
-# with different regularization weights
-# init params with prev param values
