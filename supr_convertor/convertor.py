@@ -1,6 +1,6 @@
 import os
 import pickle
-from typing import Callable
+from typing import Callable, Union
 
 import torch
 import trimesh
@@ -110,7 +110,7 @@ class Convertor:
                 self.betas is not None
                 and self.pose is not None
                 and self.trans is not None
-            )
+            ), "Parameters must be initialized from scratch for the first batch"
 
             self.betas = self.betas.clone().detach().requires_grad_(True)
             self.pose = self.pose.clone().detach().requires_grad_(True)
@@ -156,7 +156,18 @@ class Convertor:
         low_loss_threshold: float = 2e-3,
         low_loss_delta_threshold: float = 1e-6,
         n_consecutive_low_loss_delta_iters_threshold: int = 5,
+        gradient_clip: float = None,
+        params_regularization_weights: Union[tuple, list] = None,
+        params_regularization_iters: Union[tuple, list] = None,
     ):
+
+        if params_regularization_weights is not None:
+            assert (
+                params_regularization_iters is not None
+            ), "params_regularization_iters must be provided if params_regularization_weights is provided"
+            assert len(params_regularization_weights) == len(
+                params_regularization_iters
+            ), "params_regularization_weights and params_regularization_iters should have the same number of values"
 
         optimizer = torch.optim.LBFGS(
             params_to_optimize, **self.cfg.experiment.optimizer_params.to_dict()
@@ -177,7 +188,18 @@ class Convertor:
                     betas=self.betas, pose=self.pose, trans=self.trans
                 )["vertices"]
                 loss = loss_fn(estimated_vertices, target_vertices, **loss_fn_kwargs)
+
+                if params_regularization_weights is not None:
+                    for i, (weight, regularization_iters) in enumerate(
+                        zip(params_regularization_weights, params_regularization_iters)
+                    ):
+                        if n_iter < regularization_iters:
+                            loss += weight * torch.mean(params_to_optimize[i] ** 2)
+
                 loss.backward()
+
+                if gradient_clip is not None:
+                    torch.nn.utils.clip_grad_norm_(params_to_optimize, gradient_clip)
 
                 return loss
 
@@ -248,15 +270,19 @@ class Convertor:
             else:
                 batch_size = self.cfg.data.batch_size
 
-            if n_batch > 0 and self.cfg.experiment.single_betas_optimization:
-                self._init_params(batch_size=batch_size, betas_without_grad=True)
-            else:
-                self._init_params(
-                    batch_size=batch_size,
-                    copy_from_prev=self.cfg.experiment.inherit_prev_batch_params_during_optimization,
-                )
+            if n_batch == 0:
+                self._init_params(batch_size=batch_size)
 
-            print(f"Processing batch {n_batch + 1}/{len(self.dataloader)}")
+            else:
+                if self.cfg.experiment.optimize_betas_only_for_first_batch is True:
+                    self._init_params(batch_size=batch_size, betas_without_grad=True)
+                else:
+                    self._init_params(
+                        batch_size=batch_size,
+                        copy_from_prev=self.cfg.experiment.inherit_prev_batch_params_during_optimization,
+                    )
+
+            print(f"\nProcessing batch {n_batch + 1}/{len(self.dataloader)}\n")
 
             target_vertices = data["vertices"].to(self.device)
             faces = data["faces"]
@@ -264,17 +290,20 @@ class Convertor:
                 faces = faces[0]
 
             if self.cfg.experiment.edge_loss_optimization.use is True:
-                print("Performing pose optimization using an edge loss")
+                print("\nPerforming pose optimization using an edge loss\n")
                 self._optimize(
                     target_vertices=target_vertices,
                     loss_fn=edge_loss,
                     params_to_optimize=[self.pose],
                     n_iters=self.cfg.experiment.edge_loss_optimization.n_iters,
-                    loss_fn_kwargs={"faces", faces},
+                    loss_fn_kwargs={"faces": faces},
                     apply_rotation_angles_correction=self.cfg.experiment.edge_loss_optimization.apply_rotation_angles_correction,
                     low_loss_threshold=self.cfg.experiment.edge_loss_optimization.low_loss_threshold,
                     low_loss_delta_threshold=self.cfg.experiment.edge_loss_optimization.low_loss_delta_threshold,
                     n_consecutive_low_loss_delta_iters_threshold=self.cfg.experiment.edge_loss_optimization.n_consecutive_low_loss_delta_iters_threshold,
+                    gradient_clip=self.cfg.experiment.edge_loss_optimization.gradient_clip,
+                    params_regularization_weights=self.cfg.experiment.edge_loss_optimization.params_regularization_weights,
+                    params_regularization_iters=self.cfg.experiment.edge_loss_optimization.params_regularization_iters,
                 )
 
             if self.cfg.experiment.vertex_to_vertex_loss_type == "v2v_error":
@@ -284,7 +313,7 @@ class Convertor:
 
             if self.cfg.experiment.separate_global_translation_optimization.use is True:
                 print(
-                    "Performing global translation optimization using a vertex-to-vertex loss"
+                    "\nPerforming global translation optimization using a vertex-to-vertex loss\n"
                 )
                 self._optimize(
                     target_vertices=target_vertices,
@@ -298,9 +327,10 @@ class Convertor:
                     low_loss_threshold=self.cfg.experiment.separate_global_translation_optimization.low_loss_threshold,
                     low_loss_delta_threshold=self.cfg.experiment.separate_global_translation_optimization.low_loss_delta_threshold,
                     n_consecutive_low_loss_delta_iters_threshold=self.cfg.experiment.separate_global_translation_optimization.n_consecutive_low_loss_delta_iters_threshold,
+                    gradient_clip=self.cfg.experiment.separate_global_translation_optimization.gradient_clip,
                 )
 
-            print("Optimizing all parameters using a vertex-to-vertex loss")
+            print("\nOptimizing all parameters using a vertex-to-vertex loss\n")
             self._optimize(
                 target_vertices=target_vertices,
                 loss_fn=vertex_to_vertex_loss,
@@ -313,6 +343,9 @@ class Convertor:
                 low_loss_threshold=self.cfg.experiment.optimization.low_loss_threshold,
                 low_loss_delta_threshold=self.cfg.experiment.optimization.low_loss_delta_threshold,
                 n_consecutive_low_loss_delta_iters_threshold=self.cfg.experiment.optimization.n_consecutive_low_loss_delta_iters_threshold,
+                gradient_clip=self.cfg.experiment.optimization.gradient_clip,
+                params_regularization_weights=self.cfg.experiment.optimization.params_regularization_weights,
+                params_regularization_iters=self.cfg.experiment.optimization.params_regularization_iters,
             )
 
             final_estimated_vertices = self.model(

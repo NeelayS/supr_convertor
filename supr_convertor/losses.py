@@ -32,9 +32,7 @@ def v2v_error(
     reduction = reduction.lower()
     assert reduction in ("mean", "sum"), "Reduction must be either 'mean' or 'sum'"
 
-    error = torch.sqrt(
-        torch.sum((estimated_vertices - target_vertices) ** 2.0, axis=-1)
-    )
+    error = torch.sqrt(torch.sum((estimated_vertices - target_vertices) ** 2, axis=-1))
 
     if reduction == "mean":
         return torch.mean(error)

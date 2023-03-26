@@ -1,11 +1,11 @@
 data:
-  mesh_dir: /home/nshah/work/projects/transfer/scratch/data/input/meshes/emotional_body/fancy_dance
-  batch_size: 128
+  mesh_dir: /path/to/meshes
+  batch_size: 256
 
 model:
   n_betas: 300
   gender: male
-  path: /home/nshah/work/models/supr/supr_male.npy
+  path: /path/to/model
 
 experiment:
 
@@ -15,34 +15,41 @@ experiment:
     line_search_fn: strong_wolfe
 
   optimization:
-    n_iters: 500
-    low_loss_threshold: 2.0e-3
-    low_loss_delta_threshold: 1.0e-6
+    n_iters: 1000
+    low_loss_threshold: 2.0e-5
+    low_loss_delta_threshold: 1.0e-9
     n_consecutive_low_loss_delta_iters_threshold: 5
     vertex_loss_reduction: mean
     apply_rotation_angles_correction: True
+    gradient_clip: null # 1.0
+    params_regularization_weights: null # [0.01, 0.01] # 2 values for 2 sets of params: (betas, pose)
+    params_regularization_iters: null # [50, 100] # 2 values for 2 sets of params: (betas, pose)
 
   edge_loss_optimization: 
-    use: False
-    n_iters: 100
-    low_loss_threshold: 0.001
-    low_loss_delta_threshold: 0.00001
+    use: True
+    n_iters: 25
+    low_loss_threshold: 5.0e-4
+    low_loss_delta_threshold: 1.0e-7
     n_consecutive_low_loss_delta_iters_threshold: 5
     apply_rotation_angles_correction: True
+    gradient_clip: null # 1.0
+    params_regularization_weights: null # [0.01] # 1 value for 1 set of params: (pose)
+    params_regularization_iters: null # [25] # 1 value for 1 set of params: (pose)
 
   separate_global_translation_optimization: 
     use: True
-    n_iters: 50
-    low_loss_threshold: 2.0e-2
-    low_loss_delta_threshold: 1.0e-4
+    n_iters: 25
+    low_loss_threshold: 1.0e-3
+    low_loss_delta_threshold: 1.0e-5
     n_consecutive_low_loss_delta_iters_threshold: 5
     vertex_loss_reduction: mean
+    gradient_clip: null # 1.0
 
-  single_betas_optimization: False
+  optimize_betas_only_for_first_batch: False
   inherit_prev_batch_params_during_optimization: False
-  vertex_to_vertex_loss_type: v2v_error
+  vertex_to_vertex_loss_type: vertex_loss # v2v_error
 
 device: cuda:0
-out_dir: /home/nshah/work/projects/transfer/scratch/data/output/emotional_body/fancy_dance/run5
+out_dir: /path/to/output/dir
 save_output_meshes: True
 log_iterations_interval: 10
