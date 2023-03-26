@@ -8,6 +8,8 @@ from smplx.body_models import create
 
 def generate_smplx_meshes(params_path, model_path, output_dir, output_format="ply"):
 
+    os.makedirs(output_dir, exist_ok=True)
+
     params = np.load(params_path, allow_pickle=True)
 
     trans = torch.tensor(params["trans"]).float()
