@@ -15,8 +15,8 @@ experiment:
     line_search_fn: strong_wolfe
 
   optimization:
-    n_iters: 1000
-    low_loss_threshold: 2.0e-5
+    n_iters: 500
+    low_loss_threshold: 4.0e-6
     low_loss_delta_threshold: 1.0e-9
     n_consecutive_low_loss_delta_iters_threshold: 5
     vertex_loss_reduction: mean
@@ -39,8 +39,8 @@ experiment:
   separate_global_translation_optimization: 
     use: True
     n_iters: 25
-    low_loss_threshold: 1.0e-4
-    low_loss_delta_threshold: 1.0e-5
+    low_loss_threshold: 4.0e-4
+    low_loss_delta_threshold: 1.0e-6
     n_consecutive_low_loss_delta_iters_threshold: 5
     vertex_loss_reduction: mean
     gradient_clip: null # 1.0
