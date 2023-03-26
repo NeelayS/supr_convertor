@@ -1,20 +1,3 @@
-# Base config file compatible with trainer
-# Trainer tests
-# Convert.py script
-# README instructions (documentation + example)
-# Setup.py
-# PyPI
-# Web app
-# Gradient clipping
-# Regularization
-
-# with different batch sizes
-# with and without edge loss
-# with different learning rates
-# with different regularization weights
-# init params with prev param values
-
-
 import argparse
 
 import torch
