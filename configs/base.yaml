@@ -39,7 +39,7 @@ experiment:
   separate_global_translation_optimization: 
     use: True
     n_iters: 25
-    low_loss_threshold: 1.0e-3
+    low_loss_threshold: 1.0e-4
     low_loss_delta_threshold: 1.0e-5
     n_consecutive_low_loss_delta_iters_threshold: 5
     vertex_loss_reduction: mean
