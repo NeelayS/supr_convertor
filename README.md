@@ -15,7 +15,7 @@ git clone --recurse-submodules https://github.com/NeelayS/supr_convertor.git
 3. Install the dependencies for this repository:
 
 ```bash
-python setup.py install
+cd supr_convertor && python setup.py install
 cd SUPR && python setup.py install && cd ..
 ```
 
