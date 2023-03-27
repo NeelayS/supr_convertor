@@ -15,7 +15,7 @@ experiment:
     line_search_fn: strong_wolfe
 
   optimization:
-    n_iters: 500
+    n_iters: 1000
     low_loss_threshold: 4.0e-6
     low_loss_delta_threshold: 1.0e-9
     n_consecutive_low_loss_delta_iters_threshold: 5
