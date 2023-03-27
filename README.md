@@ -32,7 +32,7 @@ A simple tool to convert [SMPL-X](https://smpl-x.is.tue.mpg.de/) model parameter
     ```bash
     python generate_smplx_meshes.py --params_path <path_to_smplx_params> --model_path <path_to_smplx_model> --output_dir <path_to_output_dir> --output_format <ply/obj>
     ```
-    The `smplx_params_path` should be a `.npz` file containing the SMPL-X parameters. The `.npz` file should contain the different model parameters and metadata such as <b>gender</b>. An example file has been provided in this repository under `data`. <br>
+    The `smplx_params_path` should be a `.npz` file containing the SMPL-X parameters. The `.npz` file should contain the different model parameters and metadata such as <b>gender</b>. An example file from the [AMASS dataset](https://amass.is.tue.mpg.de/) has been provided in this repository under `data/`. <br>
     The `output_dir` should be a directory where the generated meshes will be saved. The `output_format` can be either `ply` or `obj`.
 
     If you don't have the SMPL-X model file(s), you can download them from the [official website](https://smpl-x.is.tue.mpg.de/). <br>
