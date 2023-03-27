@@ -11,7 +11,7 @@ DESCRIPTION = (
 VERSION = "0.0.1"
 AUTHOR = "Neelay Shah"
 EMAIL = "neelay.shah@tuebingen.mpg.de"
-LICENSE = "MIT"
+LICENSE = "See LICENSE"
 REPOSITORY = "https://github.com/NeelayS/supr_convertor"
 PACKAGE = "supr_convertor"
 
