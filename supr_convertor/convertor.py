@@ -9,7 +9,11 @@ from tqdm import tqdm
 from supr_convertor.config import CfgNode
 from supr_convertor.data import MeshFolderDataset
 from supr_convertor.losses import edge_loss, v2v_error, vertex_loss
-from supr_convertor.utils import seed_everything
+from supr_convertor.utils import (
+    deform_vertices,
+    read_deformation_matrix,
+    seed_everything,
+)
 
 
 class Convertor:
@@ -85,6 +89,12 @@ class Convertor:
         self.betas = None
         self.pose = None
         self.trans = None
+
+        self.deformation_matrix = None
+        if self.cfg.deformation_matrix_path is not None:
+            self.deformation_matrix = read_deformation_matrix(
+                self.cfg.experiment.deformation_matrix_path, self.device
+            )
 
     def _init_params(
         self,
@@ -285,6 +295,12 @@ class Convertor:
             print(f"\nProcessing batch {n_batch + 1}/{len(self.dataloader)}\n")
 
             target_vertices = data["vertices"].to(self.device)
+
+            if self.deformation_matrix is not None:
+                target_vertices = deform_vertices(
+                    self.deformation_matrix, target_vertices
+                )
+
             faces = data["faces"]
             if faces.ndim == 3:
                 faces = faces[0]

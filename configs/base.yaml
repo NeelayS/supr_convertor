@@ -45,6 +45,7 @@ experiment:
     vertex_loss_reduction: mean
     gradient_clip: null # 1.0
 
+  deformation_matrix_path: null # /path/to/deformation_transfer
   optimize_betas_only_for_first_batch: False
   inherit_prev_batch_params_during_optimization: False
   vertex_to_vertex_loss_type: vertex_loss # v2v_error

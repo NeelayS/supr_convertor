@@ -1,6 +1,6 @@
 # SUPR Convertor
 
-A simple tool to convert [SMPL-X](https://smpl-x.is.tue.mpg.de/) model parameters to [SUPR](https://supr.is.tue.mpg.de/) model parameters.
+A simple tool to convert [SMPL-X](https://smpl-x.is.tue.mpg.de/)/[SMPL](https://smpl.is.tue.mpg.de/index.html)/[SMPL-H](https://mano.is.tue.mpg.de/index.html) model parameters to [SUPR](https://supr.is.tue.mpg.de/) model parameters.
 
 ## Installation
 
@@ -23,7 +23,9 @@ A simple tool to convert [SMPL-X](https://smpl-x.is.tue.mpg.de/) model parameter
 
 1. Download the SUPR model(s) from the official [project website](https://supr.is.tue.mpg.de/).
 
-2. Use the `generate_smplx_meshes.py` to script to generate meshes from SMPL-X parameters and save them as either `.ply` or `.obj` files.
+2. Next, create and save meshes from the model parameters.
+
+    If you are working with SMPL-X parameters, you can use the `generate_smplx_meshes.py` to script to generate meshes from SMPL-X parameters and save them as either `.ply` or `.obj` files.
 
     First, install the [SMPL-X](https://github.com/vchoutas/smplx) package, if you don't already have it installed. <br>
 
@@ -37,7 +39,7 @@ A simple tool to convert [SMPL-X](https://smpl-x.is.tue.mpg.de/) model parameter
 
     If you don't have the SMPL-X model file(s), you can download them from the [official website](https://smpl-x.is.tue.mpg.de/). <br>
 
-    <b> Note: </b> You can skip this step if you already have SMPL-X meshes in `.ply` or `.obj` format.
+    <b> Note: </b> You can skip this step if you already have meshes in `.ply` or `.obj` format.
 
 3. Modify the base config file `configs/base_config.yaml` to suit your needs. In particular, you must specify the following parameters:
 
@@ -52,11 +54,23 @@ A simple tool to convert [SMPL-X](https://smpl-x.is.tue.mpg.de/) model parameter
     device: <device_to_use>
     out_dir: <path_to_output_dir>
     ```
+
+    If you wish to convert <b>SMPL</b> or <b>SMPL-H</b> parameters, you need to also specify a path to a deformation matrix file which contains model correspondences.
+    SMPL-X and SUPR have the same mesh topology, so no such file is required for the conversion between SMPL-X and SUPR.
+
+    ```yaml
+    experiment:
+        deformation_matrix_path: <path_to_deformation_matrix_file>
+    ```
+
+    The model correspondences can be downloaded from the SMPL-X website [here](https://smpl-x.is.tue.mpg.de/download.php#:~:text=The%20correspondences%20between,Model%20correspondences).
+    To convert between SMPL and SUPR, for example, you need to use the file named `smpl2smplx_deftrafo_setup.pkl`. For SMPL-H, use the file named `smplh2smplx_deftrafo_setup.pkl`. <br>
+
     The rest of the parameters can be left as is, or modified as per your requirements. <br> 
     To convert the parameters in the least amount of time, set the `batch_size` to the maximum possible value, constrained by the available device memory. <br>
-    The number of iterations of the optimization process for the conversion and the stopping conditions can be modified according to the use case. <br>
+    The number of iterations of the optimization process for the conversion and the stopping conditions can be modified according to the use case. The tool has been tested with the current values. <br>
 
-    <b> Note: </b> Be careful to use the same gendered SUPR model as the SMPL-X model used to generate the meshes.
+    <b> Note: </b> Be careful to use the same gendered SUPR model as the SMPL-X / SMPL / SMPL-H model used to generate the meshes.
 
 4. Run the `convert.py` script to convert the parameters.
 
