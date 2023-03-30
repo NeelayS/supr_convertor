@@ -259,6 +259,8 @@ class Convertor:
     ):
 
         last_batch_size = len(self.dataloader.dataset) % self.cfg.data.batch_size
+        if last_batch_size == 0:
+            last_batch_size = self.cfg.data.batch_size
 
         for n_batch, data in enumerate(self.dataloader):
 
