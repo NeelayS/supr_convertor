@@ -91,7 +91,7 @@ class Convertor:
         self.trans = None
 
         self.deformation_matrix = None
-        if self.cfg.deformation_matrix_path is not None:
+        if self.cfg.experiment.deformation_matrix_path is not None:
             self.deformation_matrix = read_deformation_matrix(
                 self.cfg.experiment.deformation_matrix_path, self.device
             )
