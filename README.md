@@ -2,6 +2,12 @@
 
 A simple tool to convert [SMPL-X](https://smpl-x.is.tue.mpg.de/) model parameters to [SUPR](https://supr.is.tue.mpg.de/) model parameters.
 
+<div align='center'>
+
+![A teaser video showing an example result of the SMPL-X to SUPR conversion](./assets/teaser.gif)
+
+</div>
+
 ## Installation
 
 1. Clone the repository and its submodules:
@@ -68,7 +74,7 @@ A simple tool to convert [SMPL-X](https://smpl-x.is.tue.mpg.de/) model parameter
 
 ## Acknowledgment
 
-The code in this repository takes (heavy) inspiration from the [SMPL-X repository](https://github.com/vchoutas/smplx), developed by [Vasileios Choutas](https://ps.is.mpg.de/person/vchoutas). It also relies on the [SUPR repository](https://github.com/ahmedosman/SUPR), developed by [Ahmed Osman](https://ps.is.mpg.de/person/aosman). The author would also like to thank team members Ahmed Osman, Anastasios Yiannakidis, Giorgio Becherini, Jinlong Yang, Peter Kulits, and Vasileios Choutas for their insights and helpful discussions.
+The code in this repository takes (heavy) inspiration from the [SMPL-X repository](https://github.com/vchoutas/smplx), developed by [Vasileios Choutas](https://ps.is.mpg.de/person/vchoutas). It also relies on the [SUPR repository](https://github.com/ahmedosman/SUPR), developed by [Ahmed Osman](https://ps.is.mpg.de/person/aosman). The author would also like to thank team members Ahmed Osman, Anastasios Yiannakidis, Giorgio Becherini, Jinlong Yang, Peter Kulits, and Vasileios Choutas for their insights and helpful discussions. The animation in this README showing an example conversion result was created by [Anastasios Yiannakidis](https://ps.is.mpg.de/person/ayiannakidis).
 
 ## Contact
 
