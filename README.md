@@ -74,6 +74,6 @@ The code in this repository takes (heavy) inspiration from the [SMPL-X repositor
 
 The code in this repository was developed by [Neelay Shah](https://neelays.github.io/) at the [Max Planck Institute for Intelligent Systems](https://is.mpg.de/).
 
-If you have any questions about the code or its usage, please contact neelay.shah@tuebingen.mpg.de.
+If you have any questions about the code or its usage, please create an issue here on GitHub or contact neelay.shah@tuebingen.mpg.de.
 
 For commercial licensing (and all related questions for business applications), please contact ps-licensing@tue.mpg.de.
