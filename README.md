@@ -2,6 +2,12 @@
 
 A simple tool to convert [SMPL-X](https://smpl-x.is.tue.mpg.de/) model parameters to [SUPR](https://supr.is.tue.mpg.de/) model parameters.
 
+<div align='center'>
+
+![A teaser video showing an example result of the SMPL-X to SUPR conversion](./assets/teaser.gif)
+
+</div>
+
 ## Installation
 
 1. Clone the repository and its submodules:
