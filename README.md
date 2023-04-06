@@ -45,7 +45,7 @@ A simple tool to convert [SMPL-X](https://smpl-x.is.tue.mpg.de/)/[SMPL](https://
 
     ```yaml
     data:
-        mesh_dir: <path_to_smplx_meshes>
+        mesh_dir: <path_to_meshes>
 
     model:
         gender: <gender_of_supr_body_model>
