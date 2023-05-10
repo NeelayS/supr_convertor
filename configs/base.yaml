@@ -1,6 +1,6 @@
 data:
   mesh_dir: /path/to/meshes
-  batch_size: 256
+  batch_size: 1024
 
 model:
   n_betas: 300
@@ -16,8 +16,8 @@ experiment:
 
   optimization:
     n_iters: 1000
-    low_loss_threshold: 4.0e-6
-    low_loss_delta_threshold: 1.0e-9
+    low_loss_threshold: 4.0e-6 # 2.0e-3
+    low_loss_delta_threshold: 1.0e-9 # 1.0e-7
     n_consecutive_low_loss_delta_iters_threshold: 5
     vertex_loss_reduction: mean
     apply_rotation_angles_correction: True
@@ -39,8 +39,8 @@ experiment:
   separate_global_translation_optimization: 
     use: True
     n_iters: 25
-    low_loss_threshold: 4.0e-4
-    low_loss_delta_threshold: 1.0e-6
+    low_loss_threshold: 4.0e-4 # 1.0e-2
+    low_loss_delta_threshold: 1.0e-6 # 1.0e-4
     n_consecutive_low_loss_delta_iters_threshold: 5
     vertex_loss_reduction: mean
     gradient_clip: null # 1.0
