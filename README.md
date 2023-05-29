@@ -2,6 +2,12 @@
 
 A simple tool to convert [SMPL-X](https://smpl-x.is.tue.mpg.de/)/[SMPL](https://smpl.is.tue.mpg.de/index.html)/[SMPL-H](https://mano.is.tue.mpg.de/index.html) model parameters to [SUPR](https://supr.is.tue.mpg.de/) model parameters.
 
+<div align='center'>
+
+![A teaser video showing an example result of the SMPL-X to SUPR conversion](./assets/teaser.gif)
+
+</div>
+
 ## Installation
 
 1. Clone the repository and its submodules:
@@ -82,12 +88,12 @@ A simple tool to convert [SMPL-X](https://smpl-x.is.tue.mpg.de/)/[SMPL](https://
 
 ## Acknowledgment
 
-The code in this repository takes (heavy) inspiration from the [SMPL-X repository](https://github.com/vchoutas/smplx), developed by [Vasileios Choutas](https://ps.is.mpg.de/person/vchoutas). It also relies on the [SUPR repository](https://github.com/ahmedosman/SUPR), developed by [Ahmed Osman](https://ps.is.mpg.de/person/aosman). The author would also like to thank team members Ahmed Osman, Anastasios Yiannakidis, Giorgio Becherini, Jinlong Yang, Peter Kulits, and Vasileios Choutas for their insights and helpful discussions.
+The code in this repository takes (heavy) inspiration from the [SMPL-X repository](https://github.com/vchoutas/smplx), developed by [Vasileios Choutas](https://ps.is.mpg.de/person/vchoutas). It also relies on the [SUPR repository](https://github.com/ahmedosman/SUPR), developed by [Ahmed Osman](https://ps.is.mpg.de/person/aosman). The author would also like to thank team members Ahmed Osman, Anastasios Yiannakidis, Giorgio Becherini, Jinlong Yang, Peter Kulits, and Vasileios Choutas for their insights and helpful discussions. The animation in this README showing an example conversion result was created by [Anastasios Yiannakidis](https://ps.is.mpg.de/person/ayiannakidis).
 
 ## Contact
 
 The code in this repository was developed by [Neelay Shah](https://neelays.github.io/) at the [Max Planck Institute for Intelligent Systems](https://is.mpg.de/).
 
-If you have any questions about the code or its usage, please contact neelay.shah@tuebingen.mpg.de.
+If you have any questions about the code or its usage, please create an issue here on GitHub or contact neelay.shah@tuebingen.mpg.de.
 
 For commercial licensing (and all related questions for business applications), please contact ps-licensing@tue.mpg.de.
