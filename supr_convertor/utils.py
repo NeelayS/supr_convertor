@@ -1,3 +1,6 @@
+import os
+import pickle
+
 import numpy as np
 import scipy.sparse as sp
 import torch
@@ -63,3 +66,38 @@ def get_vertices_per_edge(n_vertices, faces):
     vpe = vpe[vpe[:, 0] < vpe[:, 1]]
 
     return vpe
+
+
+def deform_vertices(deformation_matrix, vertices):
+    return torch.einsum("mn,bni->bmi", [deformation_matrix, vertices])
+
+
+def read_deformation_matrix(deformation_matrix_path, device=torch.device("cpu")):
+
+    assert os.path.exists(deformation_matrix_path), (
+        "Deformation matrix path does not exist:" f" {deformation_matrix_path}"
+    )
+    with open(deformation_matrix_path, "rb") as f:
+        def_transfer_setup = pickle.load(f, encoding="latin1")
+
+    if "mtx" in def_transfer_setup:
+        def_matrix = def_transfer_setup["mtx"]
+
+        if hasattr(def_matrix, "todense"):
+            def_matrix = def_matrix.todense()
+
+        def_matrix = np.array(def_matrix, dtype=np.float32)
+
+        num_verts = def_matrix.shape[1] // 2
+        def_matrix = def_matrix[:, :num_verts]
+
+    elif "matrix" in def_transfer_setup:
+        def_matrix = def_transfer_setup["matrix"]
+
+    else:
+        valid_keys = ["mtx", "matrix"]
+        raise KeyError(f"Deformation matrix setup must contain {valid_keys}")
+
+    def_matrix = torch.tensor(def_matrix, device=device, dtype=torch.float32)
+
+    return def_matrix
